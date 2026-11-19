@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/book.gd" id="1_book"]
+[ext_resource type="Shader" path="res://assets/shaders/book_glow.gdshader" id="2_glow"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cover"]
+albedo_color = Color(0.28, 0.075, 0.055, 1)
+roughness = 0.62
+emission_enabled = true
+emission = Color(0.35, 0.13, 0.035, 1)
+emission_energy_multiplier = 0.7
+rim_enabled = true
+rim = 0.35
+
+[sub_resource type="BoxMesh" id="BoxMesh_cover"]
+material = SubResource("StandardMaterial3D_cover")
+size = Vector3(0.36, 0.085, 0.48)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pages"]
+albedo_color = Color(0.82, 0.77, 0.62, 1)
+roughness = 0.92
+emission_enabled = true
+emission = Color(0.55, 0.48, 0.3, 1)
+emission_energy_multiplier = 0.35
+
+[sub_resource type="BoxMesh" id="BoxMesh_pages"]
+material = SubResource("StandardMaterial3D_pages")
+size = Vector3(0.32, 0.062, 0.43)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emblem"]
+albedo_color = Color(0.9, 0.66, 0.24, 1)
+emission_enabled = true
+emission = Color(1, 0.68, 0.22, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_emblem"]
+material = SubResource("StandardMaterial3D_emblem")
+size = Vector3(0.11, 0.012, 0.14)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glow"]
+shader = ExtResource("2_glow")
+shader_parameter/glow_color = Color(1, 0.72, 0.3, 1)
+shader_parameter/pulse = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_glow"]
+size = Vector2(1.35, 1.35)
+
+[node name="Book" type="Node3D"]
+script = ExtResource("1_book")
+
+[node name="Cover" type="MeshInstance3D" parent="."]
+cast_shadow = 1
+mesh = SubResource("BoxMesh_cover")
+
+[node name="Pages" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002, 0)
+mesh = SubResource("BoxMesh_pages")
+
+[node name="Emblem" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.052, 0)
+mesh = SubResource("BoxMesh_emblem")
+
+[node name="Glow" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("QuadMesh_glow")
+material_override = SubResource("ShaderMaterial_glow")
+
+[node name="BookLight" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.72, 0.32, 1)
+light_energy = 0.0
+light_specular = 0.2
+shadow_enabled = false
+omni_range = 5.0
+omni_attenuation = 1.4
